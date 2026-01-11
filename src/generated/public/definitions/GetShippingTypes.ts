@@ -1,0 +1,4 @@
+
+/** GetShippingTypes */
+export interface GetShippingTypes {
+}

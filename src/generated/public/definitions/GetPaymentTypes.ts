@@ -1,0 +1,4 @@
+
+/** GetPaymentTypes */
+export interface GetPaymentTypes {
+}

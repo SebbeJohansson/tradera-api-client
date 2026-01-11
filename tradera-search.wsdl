@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://api.tradera.com" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://api.tradera.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Services that can be called without any specific authorization (except for a Developer account).</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://api.tradera.com">
+      <s:element name="Search">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="query" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="categoryId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="pageNumber" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="orderBy" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchResult" type="tns:SearchResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SearchResult">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="TotalNumberOfItems" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="TotalNumberOfPages" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Items" type="tns:SearchItem" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Errors" type="tns:Error" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SearchItem">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Id" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShortDescription" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="BuyItNowPrice" nillable="true" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="SellerId" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="SellerAlias" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="MaxBid" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ThumbnailLink" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="SellerDsrAverage" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="EndDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="NextBid" nillable="true" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="HasBids" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsEnded" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ItemType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ItemUrl" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CategoryId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="BidCount" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ImageLinks" type="tns:ArrayOfImageLink" />
+          <s:element minOccurs="0" maxOccurs="1" name="AttributeValues" type="tns:AttributeValues" />
+          <s:element minOccurs="0" maxOccurs="1" name="LongDescription" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfImageLink">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ImageLink" nillable="true" type="tns:ImageLink" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ImageLink">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Url" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Format" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AttributeValues">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TermAttributeValues" type="tns:ArrayOfTermAttributeValue" />
+          <s:element minOccurs="0" maxOccurs="1" name="NumberAttributeValues" type="tns:ArrayOfNumberAttributeValue" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfTermAttributeValue">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="TermAttributeValue" nillable="true" type="tns:TermAttributeValue" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TermAttributeValue">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Id" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Values" type="tns:ArrayOfString" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfNumberAttributeValue">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="NumberAttributeValue" nillable="true" type="tns:NumberAttributeValue" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="NumberAttributeValue">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Id" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Values" type="tns:ArrayOfDecimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDecimal">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="decimal" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Error">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Code" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="AuthenticationHeader" type="tns:AuthenticationHeader" />
+      <s:complexType name="AuthenticationHeader">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="AppId" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="AppKey" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="ConfigurationHeader" type="tns:ConfigurationHeader" />
+      <s:complexType name="ConfigurationHeader">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Sandbox" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="MaxResultAge" type="s:int" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="SearchAdvanced">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="request" type="tns:SearchAdvancedRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SearchAdvancedRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="SearchWords" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CategoryId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="SearchInDescription" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Mode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PriceMinimum" nillable="true" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="PriceMaximum" nillable="true" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="BidsMinimum" nillable="true" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="BidsMaximum" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ZipCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CountyId" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Alias" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OrderBy" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ItemStatus" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ItemType" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="OnlyAuctionsWithBuyNow" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="OnlyItemsWithThumbnail" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="ItemsPerPage" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="PageNumber" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ItemCondition" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SellerType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Brands" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="CampaignCodeIds" type="tns:ArrayOfInt" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Attributes" type="tns:AttributeFilter" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfInt">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="int" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AttributeFilter">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Key" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Values" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SearchAdvancedResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchAdvancedResult" type="tns:SearchResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchCategoryCount">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="request" type="tns:CategoryCountRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="CategoryCountRequest">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="CategoryId" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Alias" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CountyId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="SearchInDescription" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ItemCondition" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ZipCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SearchWords" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PageNumber" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="OnlyItemsWithThumbnail" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="OnlyAuctionsWithBuyNow" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Mode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PriceMinimum" nillable="true" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="PriceMaximum" nillable="true" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="BidsMinimum" nillable="true" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="BidsMaximum" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ItemStatus" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ItemType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SellerType" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SearchCategoryCountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchCategoryCountResult" type="tns:CategoryCountResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="CategoryCountResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Categories" type="tns:SearchCategory" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Errors" type="tns:Error" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SearchCategory">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Id" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="NoOfItemsInCategory" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="NoOfItemsInCategoryIncludingChildren" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ChildCategories" type="tns:SearchCategory" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SearchByFixedCriteria">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="request" type="tns:SearchByFixedCriteriaRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SearchByFixedCriteriaRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PageNumber" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ItemType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OrderBy" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SearchByFixedCriteriaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchByFixedCriteriaResult" type="tns:SearchResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchByZipCode">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="request" type="tns:SearchByZipCodeRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SearchByZipCodeRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ZipCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PageNumber" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="OrderBy" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SearchByZipCodeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchByZipCodeResult" type="tns:SearchResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchResult" nillable="true" type="tns:SearchResult" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="SearchSoapIn">
+    <wsdl:part name="parameters" element="tns:Search" />
+  </wsdl:message>
+  <wsdl:message name="SearchSoapOut">
+    <wsdl:part name="parameters" element="tns:SearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchAuthenticationHeader">
+    <wsdl:part name="AuthenticationHeader" element="tns:AuthenticationHeader" />
+  </wsdl:message>
+  <wsdl:message name="SearchConfigurationHeader">
+    <wsdl:part name="ConfigurationHeader" element="tns:ConfigurationHeader" />
+  </wsdl:message>
+  <wsdl:message name="SearchAdvancedSoapIn">
+    <wsdl:part name="parameters" element="tns:SearchAdvanced" />
+  </wsdl:message>
+  <wsdl:message name="SearchAdvancedSoapOut">
+    <wsdl:part name="parameters" element="tns:SearchAdvancedResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchAdvancedAuthenticationHeader">
+    <wsdl:part name="AuthenticationHeader" element="tns:AuthenticationHeader" />
+  </wsdl:message>
+  <wsdl:message name="SearchAdvancedConfigurationHeader">
+    <wsdl:part name="ConfigurationHeader" element="tns:ConfigurationHeader" />
+  </wsdl:message>
+  <wsdl:message name="SearchCategoryCountSoapIn">
+    <wsdl:part name="parameters" element="tns:SearchCategoryCount" />
+  </wsdl:message>
+  <wsdl:message name="SearchCategoryCountSoapOut">
+    <wsdl:part name="parameters" element="tns:SearchCategoryCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchCategoryCountAuthenticationHeader">
+    <wsdl:part name="AuthenticationHeader" element="tns:AuthenticationHeader" />
+  </wsdl:message>
+  <wsdl:message name="SearchCategoryCountConfigurationHeader">
+    <wsdl:part name="ConfigurationHeader" element="tns:ConfigurationHeader" />
+  </wsdl:message>
+  <wsdl:message name="SearchByFixedCriteriaSoapIn">
+    <wsdl:part name="parameters" element="tns:SearchByFixedCriteria" />
+  </wsdl:message>
+  <wsdl:message name="SearchByFixedCriteriaSoapOut">
+    <wsdl:part name="parameters" element="tns:SearchByFixedCriteriaResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchByFixedCriteriaAuthenticationHeader">
+    <wsdl:part name="AuthenticationHeader" element="tns:AuthenticationHeader" />
+  </wsdl:message>
+  <wsdl:message name="SearchByFixedCriteriaConfigurationHeader">
+    <wsdl:part name="ConfigurationHeader" element="tns:ConfigurationHeader" />
+  </wsdl:message>
+  <wsdl:message name="SearchByZipCodeSoapIn">
+    <wsdl:part name="parameters" element="tns:SearchByZipCode" />
+  </wsdl:message>
+  <wsdl:message name="SearchByZipCodeSoapOut">
+    <wsdl:part name="parameters" element="tns:SearchByZipCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchByZipCodeAuthenticationHeader">
+    <wsdl:part name="AuthenticationHeader" element="tns:AuthenticationHeader" />
+  </wsdl:message>
+  <wsdl:message name="SearchByZipCodeConfigurationHeader">
+    <wsdl:part name="ConfigurationHeader" element="tns:ConfigurationHeader" />
+  </wsdl:message>
+  <wsdl:message name="SearchHttpGetIn">
+    <wsdl:part name="query" type="s:string" />
+    <wsdl:part name="categoryId" type="s:string" />
+    <wsdl:part name="pageNumber" type="s:string" />
+    <wsdl:part name="orderBy" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchHttpGetOut">
+    <wsdl:part name="Body" element="tns:SearchResult" />
+  </wsdl:message>
+  <wsdl:message name="SearchHttpPostIn">
+    <wsdl:part name="query" type="s:string" />
+    <wsdl:part name="categoryId" type="s:string" />
+    <wsdl:part name="pageNumber" type="s:string" />
+    <wsdl:part name="orderBy" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchHttpPostOut">
+    <wsdl:part name="Body" element="tns:SearchResult" />
+  </wsdl:message>
+  <wsdl:portType name="SearchServiceSoap">
+    <wsdl:operation name="Search">
+      <wsdl:input message="tns:SearchSoapIn" />
+      <wsdl:output message="tns:SearchSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchAdvanced">
+      <wsdl:input message="tns:SearchAdvancedSoapIn" />
+      <wsdl:output message="tns:SearchAdvancedSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchCategoryCount">
+      <wsdl:input message="tns:SearchCategoryCountSoapIn" />
+      <wsdl:output message="tns:SearchCategoryCountSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchByFixedCriteria">
+      <wsdl:input message="tns:SearchByFixedCriteriaSoapIn" />
+      <wsdl:output message="tns:SearchByFixedCriteriaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchByZipCode">
+      <wsdl:input message="tns:SearchByZipCodeSoapIn" />
+      <wsdl:output message="tns:SearchByZipCodeSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="SearchServiceHttpGet">
+    <wsdl:operation name="Search">
+      <wsdl:input message="tns:SearchHttpGetIn" />
+      <wsdl:output message="tns:SearchHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="SearchServiceHttpPost">
+    <wsdl:operation name="Search">
+      <wsdl:input message="tns:SearchHttpPostIn" />
+      <wsdl:output message="tns:SearchHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SearchServiceSoap" type="tns:SearchServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Search">
+      <soap:operation soapAction="http://api.tradera.com/Search" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SearchAuthenticationHeader" part="AuthenticationHeader" use="literal" />
+        <soap:header message="tns:SearchConfigurationHeader" part="ConfigurationHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchAdvanced">
+      <soap:operation soapAction="http://api.tradera.com/SearchAdvanced" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SearchAdvancedAuthenticationHeader" part="AuthenticationHeader" use="literal" />
+        <soap:header message="tns:SearchAdvancedConfigurationHeader" part="ConfigurationHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchCategoryCount">
+      <soap:operation soapAction="http://api.tradera.com/SearchCategoryCount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SearchCategoryCountAuthenticationHeader" part="AuthenticationHeader" use="literal" />
+        <soap:header message="tns:SearchCategoryCountConfigurationHeader" part="ConfigurationHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchByFixedCriteria">
+      <soap:operation soapAction="http://api.tradera.com/SearchByFixedCriteria" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SearchByFixedCriteriaAuthenticationHeader" part="AuthenticationHeader" use="literal" />
+        <soap:header message="tns:SearchByFixedCriteriaConfigurationHeader" part="ConfigurationHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchByZipCode">
+      <soap:operation soapAction="http://api.tradera.com/SearchByZipCode" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:SearchByZipCodeAuthenticationHeader" part="AuthenticationHeader" use="literal" />
+        <soap:header message="tns:SearchByZipCodeConfigurationHeader" part="ConfigurationHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SearchServiceSoap12" type="tns:SearchServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Search">
+      <soap12:operation soapAction="http://api.tradera.com/Search" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SearchAuthenticationHeader" part="AuthenticationHeader" use="literal" />
+        <soap12:header message="tns:SearchConfigurationHeader" part="ConfigurationHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchAdvanced">
+      <soap12:operation soapAction="http://api.tradera.com/SearchAdvanced" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SearchAdvancedAuthenticationHeader" part="AuthenticationHeader" use="literal" />
+        <soap12:header message="tns:SearchAdvancedConfigurationHeader" part="ConfigurationHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchCategoryCount">
+      <soap12:operation soapAction="http://api.tradera.com/SearchCategoryCount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SearchCategoryCountAuthenticationHeader" part="AuthenticationHeader" use="literal" />
+        <soap12:header message="tns:SearchCategoryCountConfigurationHeader" part="ConfigurationHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchByFixedCriteria">
+      <soap12:operation soapAction="http://api.tradera.com/SearchByFixedCriteria" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SearchByFixedCriteriaAuthenticationHeader" part="AuthenticationHeader" use="literal" />
+        <soap12:header message="tns:SearchByFixedCriteriaConfigurationHeader" part="ConfigurationHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchByZipCode">
+      <soap12:operation soapAction="http://api.tradera.com/SearchByZipCode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:SearchByZipCodeAuthenticationHeader" part="AuthenticationHeader" use="literal" />
+        <soap12:header message="tns:SearchByZipCodeConfigurationHeader" part="ConfigurationHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SearchServiceHttpGet" type="tns:SearchServiceHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="Search">
+      <http:operation location="/Search" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SearchServiceHttpPost" type="tns:SearchServiceHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="Search">
+      <http:operation location="/Search" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SearchService">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Services that can be called without any specific authorization (except for a Developer account).</wsdl:documentation>
+    <wsdl:port name="SearchServiceSoap" binding="tns:SearchServiceSoap">
+      <soap:address location="https://api.tradera.com/v3/SearchService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SearchServiceSoap12" binding="tns:SearchServiceSoap12">
+      <soap12:address location="https://api.tradera.com/v3/SearchService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SearchServiceHttpGet" binding="tns:SearchServiceHttpGet">
+      <http:address location="http://api.tradera.com/v3/SearchService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SearchServiceHttpPost" binding="tns:SearchServiceHttpPost">
+      <http:address location="http://api.tradera.com/v3/SearchService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

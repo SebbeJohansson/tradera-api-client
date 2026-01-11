@@ -1,0 +1,4 @@
+
+/** GetCounties */
+export interface GetCounties {
+}

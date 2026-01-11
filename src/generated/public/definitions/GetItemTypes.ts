@@ -1,0 +1,4 @@
+
+/** GetItemTypes */
+export interface GetItemTypes {
+}

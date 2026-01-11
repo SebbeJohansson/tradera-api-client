@@ -1,0 +1,4 @@
+
+/** GetAcceptedBidderTypes */
+export interface GetAcceptedBidderTypes {
+}
