@@ -69,28 +69,6 @@ export interface PublicClient extends SoapClient {
     GetFeedbackAsync(getFeedback: GetFeedback, options?: ISoapExOptions): Promise<[result: GetFeedbackResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
     GetFeedbackSummaryAsync(getFeedbackSummary: GetFeedbackSummary, options?: ISoapExOptions): Promise<[result: GetFeedbackSummaryResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
     GetShippingOptionsAsync(getShippingOptions: GetShippingOptions, options?: ISoapExOptions): Promise<[result: GetShippingOptionsResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetItemAsync(getItem: GetItem, options?: ISoapExOptions): Promise<[result: GetItemResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetSellerItemsAsync(getSellerItems: GetSellerItems, options?: ISoapExOptions): Promise<[result: GetSellerItemsResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetSellerItemsQuickInfoAsync(getSellerItemsQuickInfo: GetSellerItemsQuickInfo, options?: ISoapExOptions): Promise<[result: GetSellerItemsQuickInfoResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetSearchResultAsync(getSearchResult: GetSearchResult, options?: ISoapExOptions): Promise<[result: GetSearchResultResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetSearchResultAdvancedAsync(getSearchResultAdvanced: GetSearchResultAdvanced, options?: ISoapExOptions): Promise<[result: GetSearchResultAdvancedResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetSearchResultAdvancedXmlAsync(getSearchResultAdvancedXml: GetSearchResultAdvancedXml, options?: ISoapExOptions): Promise<[result: GetSearchResultAdvancedXmlResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetUserByAliasAsync(getUserByAlias: GetUserByAlias, options?: ISoapExOptions): Promise<[result: GetUserByAliasResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    FetchTokenAsync(fetchToken: FetchToken, options?: ISoapExOptions): Promise<[result: FetchTokenResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetOfficalTimeAsync(getOfficalTime: GetOfficalTime, options?: ISoapExOptions): Promise<[result: GetOfficalTimeResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetCategoriesAsync(getCategories: GetCategories, options?: ISoapExOptions): Promise<[result: GetCategoriesResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetAttributeDefinitionsAsync(getAttributeDefinitions: GetAttributeDefinitions, options?: ISoapExOptions): Promise<[result: GetAttributeDefinitionsResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetPaymentTypesAsync(getPaymentTypes: GetPaymentTypes, options?: ISoapExOptions): Promise<[result: GetPaymentTypesResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetAcceptedBidderTypesAsync(getAcceptedBidderTypes: GetAcceptedBidderTypes, options?: ISoapExOptions): Promise<[result: GetAcceptedBidderTypesResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetExpoItemTypesAsync(getExpoItemTypes: GetExpoItemTypes, options?: ISoapExOptions): Promise<[result: GetExpoItemTypesResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetShippingTypesAsync(getShippingTypes: GetShippingTypes, options?: ISoapExOptions): Promise<[result: GetShippingTypesResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetItemTypesAsync(getItemTypes: GetItemTypes, options?: ISoapExOptions): Promise<[result: GetItemTypesResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetCountiesAsync(getCounties: GetCounties, options?: ISoapExOptions): Promise<[result: GetCountiesResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetItemFieldValuesAsync(getItemFieldValues: GetItemFieldValues, options?: ISoapExOptions): Promise<[result: GetItemFieldValuesResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetItemAddedDescriptionsAsync(getItemAddedDescriptions: GetItemAddedDescriptions, options?: ISoapExOptions): Promise<[result: GetItemAddedDescriptionsResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetFeedbackAsync(getFeedback: GetFeedback, options?: ISoapExOptions): Promise<[result: GetFeedbackResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetFeedbackSummaryAsync(getFeedbackSummary: GetFeedbackSummary, options?: ISoapExOptions): Promise<[result: GetFeedbackSummaryResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    GetShippingOptionsAsync(getShippingOptions: GetShippingOptions, options?: ISoapExOptions): Promise<[result: GetShippingOptionsResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
 }
 
 /** Create PublicClient */

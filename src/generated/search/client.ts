@@ -18,11 +18,6 @@ export interface SearchClient extends SoapClient {
     SearchCategoryCountAsync(searchCategoryCount: SearchCategoryCount, options?: ISoapExOptions): Promise<[result: SearchCategoryCountResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
     SearchByFixedCriteriaAsync(searchByFixedCriteria: SearchByFixedCriteria, options?: ISoapExOptions): Promise<[result: SearchByFixedCriteriaResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
     SearchByZipCodeAsync(searchByZipCode: SearchByZipCode, options?: ISoapExOptions): Promise<[result: SearchByZipCodeResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    SearchAsync(search: Search, options?: ISoapExOptions): Promise<[result: SearchResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    SearchAdvancedAsync(searchAdvanced: SearchAdvanced, options?: ISoapExOptions): Promise<[result: SearchAdvancedResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    SearchCategoryCountAsync(searchCategoryCount: SearchCategoryCount, options?: ISoapExOptions): Promise<[result: SearchCategoryCountResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    SearchByFixedCriteriaAsync(searchByFixedCriteria: SearchByFixedCriteria, options?: ISoapExOptions): Promise<[result: SearchByFixedCriteriaResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
-    SearchByZipCodeAsync(searchByZipCode: SearchByZipCode, options?: ISoapExOptions): Promise<[result: SearchByZipCodeResponse, rawResponse: any, soapHeader: any, rawRequest: any]>;
 }
 
 /** Create SearchClient */
