@@ -2,8 +2,8 @@
   "name": "tradera-soap-api-client",
   "version": "0.0.8",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/SebbeJohansson/tradera-api-client"
@@ -12,15 +12,18 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./search": {
       "types": "./dist/generated/search/index.d.ts",
-      "import": "./dist/generated/search/index.js"
+      "import": "./dist/generated/search/index.js",
+      "default": "./dist/generated/search/index.js"
     },
     "./public": {
       "types": "./dist/generated/public/index.d.ts",
-      "import": "./dist/generated/public/index.js"
+      "import": "./dist/generated/public/index.js",
+      "default": "./dist/generated/public/index.js"
     }
   },
   "license": "MIT",

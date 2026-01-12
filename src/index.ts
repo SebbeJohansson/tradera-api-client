@@ -1,10 +1,10 @@
-// Export all types from search and public services with namespaces to avoid conflicts
-export * as Search from './generated/search/index.js';
-export * as Public from './generated/public/index.js';
-
 // Import clients for wrapper classes
 import { createClientAsync as createSearchClientAsync, type SearchClient } from './generated/search/client.js';
 import { createClientAsync as createPublicClientAsync, type PublicClient } from './generated/public/client.js';
+
+// Re-export types that users commonly need (tree-shakeable)
+export type { SearchClient } from './generated/search/client.js';
+export type { PublicClient } from './generated/public/client.js';
 
 /**
  * Configuration for Tradera API authentication.
@@ -28,6 +28,33 @@ function addAuthHeader<T extends { addSoapHeader: Function }>(client: T, authCon
 }
 
 /**
+ * Base class for Tradera API clients.
+ * Handles client initialization and authentication header setup.
+ */
+
+abstract class BaseTraderaClient<TClient extends { addSoapHeader: Function }> {
+  protected client: TClient | null = null;
+  protected wsdlUrl: string;
+  protected authConfig: TraderaAuthConfig;
+
+  constructor(authConfig: TraderaAuthConfig) {
+    this.authConfig = authConfig;
+  }
+
+  protected async initialize() {
+    if (!this.client) {
+      this.client = await this.createClientAsync(this.wsdlUrl);
+      addAuthHeader(this.client, this.authConfig);
+    }
+    return this.client;
+  }
+
+  protected async createClientAsync(wsdlUrl: string): Promise<TClient> {
+    throw new Error('createClientAsync must be implemented by subclass');
+  }
+}
+
+/**
  * A convenience wrapper for the Tradera Search Service API.
  * Handles authentication automatically and provides typed methods for all search operations.
  * 
@@ -39,25 +66,11 @@ function addAuthHeader<T extends { addSoapHeader: Function }>(client: T, authCon
  * const [result] = await client.search({ query: "vintage", categoryId: 0 });
  * ```
  */
-export class TraderaSearchClient {
-  private client: SearchClient | null = null;
-  private wsdlUrl = 'http://api.tradera.com/v3/SearchService.asmx?WSDL';
-  private authConfig: TraderaAuthConfig;
+export class TraderaSearchClient extends BaseTraderaClient<SearchClient> {
+  wsdlUrl = 'http://api.tradera.com/v3/SearchService.asmx?WSDL';
 
-  /**
-   * Creates a new TraderaSearchClient instance.
-   * @param authConfig - Authentication configuration containing appId and appKey
-   */
-  constructor(authConfig: TraderaAuthConfig) {
-    this.authConfig = authConfig;
-  }
-
-  private async initialize() {
-    if (!this.client) {
-      this.client = await createSearchClientAsync(this.wsdlUrl);
-      addAuthHeader(this.client, this.authConfig);
-    }
-    return this.client;
+  createClientAsync(wsdlUrl: string): Promise<SearchClient> {
+    return createSearchClientAsync(wsdlUrl);
   }
 
   /**
@@ -74,7 +87,8 @@ export class TraderaSearchClient {
    */
   async search(params: Parameters<SearchClient['SearchAsync']>[0]) {
     const client = await this.initialize();
-    return client.SearchAsync(params);
+    const [result] = await client.SearchAsync(params);
+    return result;
   }
 
   /**
@@ -96,7 +110,8 @@ export class TraderaSearchClient {
    */
   async searchAdvanced(params: Parameters<SearchClient['SearchAdvancedAsync']>[0]) {
     const client = await this.initialize();
-    return client.SearchAdvancedAsync(params);
+    const [result] = await client.SearchAdvancedAsync(params);
+    return result;
   }
 
   /**
@@ -117,7 +132,8 @@ export class TraderaSearchClient {
    */
   async searchCategoryCount(params: Parameters<SearchClient['SearchCategoryCountAsync']>[0]) {
     const client = await this.initialize();
-    return client.SearchCategoryCountAsync(params);
+    const [result] = await client.SearchCategoryCountAsync(params);
+    return result;
   }
 
   /**
@@ -129,7 +145,8 @@ export class TraderaSearchClient {
    */
   async searchByFixedCriteria(params: Parameters<SearchClient['SearchByFixedCriteriaAsync']>[0]) {
     const client = await this.initialize();
-    return client.SearchByFixedCriteriaAsync(params);
+    const [result] = await client.SearchByFixedCriteriaAsync(params);
+    return result;
   }
 
   /**
@@ -141,7 +158,8 @@ export class TraderaSearchClient {
    */
   async searchByZipCode(params: Parameters<SearchClient['SearchByZipCodeAsync']>[0]) {
     const client = await this.initialize();
-    return client.SearchByZipCodeAsync(params);
+    const [result] = await client.SearchByZipCodeAsync(params);
+    return result;
   }
 }
 
@@ -157,26 +175,8 @@ export class TraderaSearchClient {
  * const [result] = await client.getItem({ itemId: 123456789 });
  * ```
  */
-export class TraderaPublicClient {
-  private client: PublicClient | null = null;
-  private wsdlUrl = 'http://api.tradera.com/v3/PublicService.asmx?WSDL';
-  private authConfig: TraderaAuthConfig;
-
-  /**
-   * Creates a new TraderaPublicClient instance.
-   * @param authConfig - Authentication configuration containing appId and appKey
-   */
-  constructor(authConfig: TraderaAuthConfig) {
-    this.authConfig = authConfig;
-  }
-
-  private async initialize() {
-    if (!this.client) {
-      this.client = await createPublicClientAsync(this.wsdlUrl);
-      addAuthHeader(this.client, this.authConfig);
-    }
-    return this.client;
-  }
+export class TraderaPublicClient extends BaseTraderaClient<PublicClient> {
+  wsdlUrl = 'http://api.tradera.com/v3/PublicService.asmx?WSDL';
 
   /**
    * Gets details for a specific item.
@@ -187,7 +187,8 @@ export class TraderaPublicClient {
    */
   async getItem(params: Parameters<PublicClient['GetItemAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetItemAsync(params);
+    const [result] = await client.GetItemAsync(params);
+    return result;
   }
 
   /**
@@ -199,7 +200,8 @@ export class TraderaPublicClient {
    */
   async getSellerItems(params: Parameters<PublicClient['GetSellerItemsAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetSellerItemsAsync(params);
+    const [result] = await client.GetSellerItemsAsync(params);
+    return result;
   }
 
   /**
@@ -211,7 +213,8 @@ export class TraderaPublicClient {
    */
   async getSellerItemsQuickInfo(params: Parameters<PublicClient['GetSellerItemsQuickInfoAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetSellerItemsQuickInfoAsync(params);
+    const [result] = await client.GetSellerItemsQuickInfoAsync(params);
+    return result;
   }
 
   /**
@@ -224,7 +227,8 @@ export class TraderaPublicClient {
    */
   async getSearchResult(params: Parameters<PublicClient['GetSearchResultAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetSearchResultAsync(params);
+    const [result] = await client.GetSearchResultAsync(params);
+    return result;
   }
 
   /**
@@ -237,7 +241,8 @@ export class TraderaPublicClient {
    */
   async getSearchResultAdvanced(params: Parameters<PublicClient['GetSearchResultAdvancedAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetSearchResultAdvancedAsync(params);
+    const [result] = await client.GetSearchResultAdvancedAsync(params);
+    return result;
   }
 
   /**
@@ -250,7 +255,8 @@ export class TraderaPublicClient {
    */
   async getSearchResultAdvancedXml(params: Parameters<PublicClient['GetSearchResultAdvancedXmlAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetSearchResultAdvancedXmlAsync(params);
+    const [result] = await client.GetSearchResultAdvancedXmlAsync(params);
+    return result;
   }
 
   /**
@@ -262,7 +268,8 @@ export class TraderaPublicClient {
    */
   async getUserByAlias(params: Parameters<PublicClient['GetUserByAliasAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetUserByAliasAsync(params);
+    const [result] = await client.GetUserByAliasAsync(params);
+    return result;
   }
 
   /**
@@ -274,7 +281,8 @@ export class TraderaPublicClient {
    */
   async fetchToken(params: Parameters<PublicClient['FetchTokenAsync']>[0]) {
     const client = await this.initialize();
-    return client.FetchTokenAsync(params);
+    const [result] = await client.FetchTokenAsync(params);
+    return result;
   }
 
   /**
@@ -286,7 +294,8 @@ export class TraderaPublicClient {
    */
   async getOfficalTime(params: Parameters<PublicClient['GetOfficalTimeAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetOfficalTimeAsync(params);
+    const [result] = await client.GetOfficalTimeAsync(params);
+    return result;
   }
 
   /**
@@ -298,7 +307,8 @@ export class TraderaPublicClient {
    */
   async getCategories(params: Parameters<PublicClient['GetCategoriesAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetCategoriesAsync(params);
+    const [result] = await client.GetCategoriesAsync(params);
+    return result;
   }
 
   /**
@@ -310,7 +320,8 @@ export class TraderaPublicClient {
    */
   async getAttributeDefinitions(params: Parameters<PublicClient['GetAttributeDefinitionsAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetAttributeDefinitionsAsync(params);
+    const [result] = await client.GetAttributeDefinitionsAsync(params);
+    return result;
   }
 
   /**
@@ -323,7 +334,8 @@ export class TraderaPublicClient {
    */
   async getPaymentTypes(params: Parameters<PublicClient['GetPaymentTypesAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetPaymentTypesAsync(params);
+    const [result] = await client.GetPaymentTypesAsync(params);
+    return result;
   }
 
   /**
@@ -335,7 +347,8 @@ export class TraderaPublicClient {
    */
   async getAcceptedBidderTypes(params: Parameters<PublicClient['GetAcceptedBidderTypesAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetAcceptedBidderTypesAsync(params);
+    const [result] = await client.GetAcceptedBidderTypesAsync(params);
+    return result;
   }
 
   /**
@@ -348,7 +361,8 @@ export class TraderaPublicClient {
    */
   async getExpoItemTypes(params: Parameters<PublicClient['GetExpoItemTypesAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetExpoItemTypesAsync(params);
+    const [result] = await client.GetExpoItemTypesAsync(params);
+    return result;
   }
 
   /**
@@ -361,7 +375,8 @@ export class TraderaPublicClient {
    */
   async getShippingTypes(params: Parameters<PublicClient['GetShippingTypesAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetShippingTypesAsync(params);
+    const [result] = await client.GetShippingTypesAsync(params);
+    return result;
   }
 
   /**
@@ -373,7 +388,8 @@ export class TraderaPublicClient {
    */
   async getItemTypes(params: Parameters<PublicClient['GetItemTypesAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetItemTypesAsync(params);
+    const [result] = await client.GetItemTypesAsync(params);
+    return result;
   }
 
   /**
@@ -386,7 +402,8 @@ export class TraderaPublicClient {
    */
   async getCounties(params: Parameters<PublicClient['GetCountiesAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetCountiesAsync(params);
+    const [result] = await client.GetCountiesAsync(params);
+    return result;
   }
 
   /**
@@ -398,7 +415,8 @@ export class TraderaPublicClient {
    */
   async getItemFieldValues(params: Parameters<PublicClient['GetItemFieldValuesAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetItemFieldValuesAsync(params);
+    const [result] = await client.GetItemFieldValuesAsync(params);
+    return result;
   }
 
   /**
@@ -410,7 +428,8 @@ export class TraderaPublicClient {
    */
   async getItemAddedDescriptions(params: Parameters<PublicClient['GetItemAddedDescriptionsAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetItemAddedDescriptionsAsync(params);
+    const [result] = await client.GetItemAddedDescriptionsAsync(params);
+    return result;
   }
 
   /**
@@ -422,7 +441,8 @@ export class TraderaPublicClient {
    */
   async getFeedback(params: Parameters<PublicClient['GetFeedbackAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetFeedbackAsync(params);
+    const [result] = await client.GetFeedbackAsync(params);
+    return result;
   }
 
   /**
@@ -434,7 +454,8 @@ export class TraderaPublicClient {
    */
   async getFeedbackSummary(params: Parameters<PublicClient['GetFeedbackSummaryAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetFeedbackSummaryAsync(params);
+    const [result] = await client.GetFeedbackSummaryAsync(params);
+    return result;
   }
 
   /**
@@ -446,7 +467,8 @@ export class TraderaPublicClient {
    */
   async getShippingOptions(params: Parameters<PublicClient['GetShippingOptionsAsync']>[0]) {
     const client = await this.initialize();
-    return client.GetShippingOptionsAsync(params);
+    const [result] = await client.GetShippingOptionsAsync(params);
+    return result;
   }
 }
 

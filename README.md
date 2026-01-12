@@ -37,7 +37,7 @@ const searchClient = new TraderaSearchClient({
 });
 
 // Basic search
-const [result] = await searchClient.search({
+const result = await searchClient.search({
   query: "vintage",
   categoryId: 0
 });
@@ -46,7 +46,7 @@ console.log(result.SearchResult?.Items);
 console.log(result.SearchResult?.TotalNumberOfItems);
 
 // Advanced search with filters
-const [advancedResult] = await searchClient.searchAdvanced({
+const advancedResult = await searchClient.searchAdvanced({
   query: "retro",
   categoryId: 0,
   pageNumber: 1,
@@ -55,7 +55,7 @@ const [advancedResult] = await searchClient.searchAdvanced({
 });
 
 // Search by zip code
-const [localResult] = await searchClient.searchByZipCode({
+const localResult = await searchClient.searchByZipCode({
   zipCode: "11122",
   distance: 10,
   categoryId: 0
@@ -75,28 +75,28 @@ const publicClient = new TraderaPublicClient({
 });
 
 // Get item details
-const [item] = await publicClient.getItem({ itemId: 123456789 });
+const item = await publicClient.getItem({ itemId: 123456789 });
 console.log(item.GetItemResult?.Title);
 console.log(item.GetItemResult?.CurrentBid);
 
 // Get all categories
-const [categories] = await publicClient.getCategories({});
+const categories = await publicClient.getCategories({});
 console.log(categories.GetCategoriesResult?.Categories);
 
 // Get user information
-const [user] = await publicClient.getUserByAlias({ alias: "username" });
+const user = await publicClient.getUserByAlias({ alias: "username" });
 console.log(user.GetUserByAliasResult?.TotalRating);
 
 // Get seller's items
-const [sellerItems] = await publicClient.getSellerItems({ sellerId: 12345 });
+const sellerItems = await publicClient.getSellerItems({ sellerId: 12345 });
 console.log(sellerItems.GetSellerItemsResult?.Items);
 
 // Get user feedback
-const [feedback] = await publicClient.getFeedback({ userId: 12345 });
+const feedback = await publicClient.getFeedback({ userId: 12345 });
 console.log(feedback.GetFeedbackResult?.Feedbacks);
 
 // Get official Tradera time (for auction endings)
-const [time] = await publicClient.getOfficalTime({});
+const time = await publicClient.getOfficalTime({});
 console.log(time.GetOfficalTimeResult);
 ```
 
