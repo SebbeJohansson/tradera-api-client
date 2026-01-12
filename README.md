@@ -1,14 +1,20 @@
 # Tradera SOAP API Client
 
-A fully-typed TypeScript client for the [Tradera](https://www.tradera.com) SOAP API. This package provides auto-generated TypeScript types and client bindings for Tradera's Search and Public services.
+<p>
+  <a href="https://www.npmjs.com/package/tradera-soap-api-client"><img src="https://img.shields.io/npm/v/tradera-soap-api-client" alt="Version"></a>
+  <a href="hhttps://www.npmjs.com/package/tradera-soap-api-client"><img src="https://img.shields.io/npm/dm/tradera-soap-api-client" alt="Downloads"></a>
+  <a href="https://github.com/SebbeJohansson/tradera-api-client/blob/main/LICENSE"><img src="https://img.shields.io/github/license/SebbeJohansson/tradera-api-client" alt="License"></a>
+</p>
+
+A fully-typed TypeScript client for the [Tradera](https://www.tradera.com) SOAP API. This package provides easy-to-use clients for Tradera's services, with auto-generated TypeScript types and client bindings.
 
 ## Features
 
 - 🔒 **Fully typed** - Complete TypeScript definitions for all API methods and responses
-- 🔄 **Auto-generated** - Client code is generated directly from Tradera's WSDL definitions
 - ⚡ **Async/await support** - All API methods return Promises
 - 🛠️ **IntelliSense support** - Full autocomplete in VS Code and other TypeScript-aware editors
 - 🌳 **Tree-shakeable** - Import only what you need
+- 🔄 **Auto-generated** - Client code is generated directly from Tradera's WSDL definitions
 
 ## Official Tradera API Documentation
 
@@ -120,7 +126,7 @@ async function searchTradera() {
   }, '', 'tns', 'http://api.tradera.com');
 
   // Search for items
-  const [result] = await client.SearchAsync({
+  const result = await client.SearchAsync({
     query: "vintage",
     categoryId: 0
   });
