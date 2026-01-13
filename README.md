@@ -2,7 +2,7 @@
 
 <p>
   <a href="https://www.npmjs.com/package/tradera-soap-api-client"><img src="https://img.shields.io/npm/v/tradera-soap-api-client" alt="Version"></a>
-  <a href="hhttps://www.npmjs.com/package/tradera-soap-api-client"><img src="https://img.shields.io/npm/dm/tradera-soap-api-client" alt="Downloads"></a>
+  <a href="https://www.npmjs.com/package/tradera-soap-api-client"><img src="https://img.shields.io/npm/dm/tradera-soap-api-client" alt="Downloads"></a>
   <a href="https://github.com/SebbeJohansson/tradera-api-client/blob/main/LICENSE"><img src="https://img.shields.io/github/license/sebbejohansson/tradera-api-client" alt="License"></a>
 </p>
 
@@ -25,8 +25,13 @@ A fully-typed TypeScript client for the [Tradera](https://www.tradera.com) SOAP 
 ## Installation
 
 ```bash
-npm install
+npm install tradera-soap-api-client
 ```
+or if you use yarn
+```bash
+yarn add tradera-soap-api-client
+```
+
 
 ## Usage
 
