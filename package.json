@@ -1,7 +1,7 @@
 {
   "name": "tradera-soap-api-client",
   "description": "Tradera API Client with typescript support",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
