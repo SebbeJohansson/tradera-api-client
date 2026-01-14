@@ -4,6 +4,7 @@ import { createClientAsync as createPublicClientAsync, type PublicClient } from 
 import { createClientAsync as createListingClientAsync, type ListingClient } from './generated/listing/client.js';
 import { createClientAsync as createRestrictedClientAsync, type RestrictedClient } from './generated/restricted/client.js';
 import { createClientAsync as createOrderClientAsync, type OrderClient } from './generated/order/client.js';
+import { createClientAsync as createBuyerClientAsync, type BuyerClient } from './generated/buyer/client.js';
 
 // Re-export types that users commonly need (tree-shakeable)
 export type { SearchClient } from './generated/search/client.js';
@@ -11,6 +12,7 @@ export type { PublicClient } from './generated/public/client.js';
 export type { ListingClient } from './generated/listing/client.js';
 export type { RestrictedClient } from './generated/restricted/client.js';
 export type { OrderClient } from './generated/order/client.js';
+export type { BuyerClient } from './generated/buyer/client.js';
 
 /**
  * Configuration for Tradera API authentication.
@@ -785,6 +787,88 @@ export class TraderaOrderClient extends BaseTraderaClient<OrderClient> {
     const client = await this.initialize();
     const [result] = await client.GetFreightLabelsAsync(params);
     return result.GetFreightLabelsResult;
+  }
+}
+
+/**
+ * A convenience wrapper for the Tradera Buyer Service API.
+ * Handles authentication automatically and provides typed methods for all buyer operations.
+ *
+ * **Authentication required:** This service requires user impersonation credentials.
+ * You must provide `userId` and `token` in the auth config.
+ *
+ * @see {@link https://api.tradera.com/v3/BuyerService.asmx} for API documentation
+ *
+ * @example
+ * ```typescript
+ * const client = new TraderaBuyerClient({
+ *   appId: 1234,
+ *   appKey: "your-key",
+ *   userId: 5678,
+ *   token: "user-auth-token"
+ * });
+ * const [result] = await client.getBuyerTransactions({});
+ * ```
+ */
+export class TraderaBuyerClient extends BaseTraderaClient<BuyerClient> {
+  wsdlUrl = 'https://api.tradera.com/v3/BuyerService.asmx?WSDL';
+
+  createClientAsync(wsdlUrl: string): Promise<BuyerClient> {
+    return createBuyerClientAsync(wsdlUrl);
+  }
+
+  async buy(params: Parameters<BuyerClient['BuyAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.BuyAsync(params);
+    return result.BuyResult;
+  }
+
+  async getMemorylistItems(params: Parameters<BuyerClient['GetMemorylistItemsAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetMemorylistItemsAsync(params);
+    return result.GetMemorylistItemsResult;
+  }
+
+  async addToMemorylist(params: Parameters<BuyerClient['AddToMemorylistAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.AddToMemorylistAsync(params);
+    return result;
+  }
+
+  async removeFromMemorylist(params: Parameters<BuyerClient['RemoveFromMemorylistAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.RemoveFromMemorylistAsync(params);
+    return result;
+  }
+
+  async getBuyerTransactions(params: Parameters<BuyerClient['GetBuyerTransactionsAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetBuyerTransactionsAsync(params);
+    return result.GetBuyerTransactionsResult;
+  }
+
+  async getBiddingInfo(params: Parameters<BuyerClient['GetBiddingInfoAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetBiddingInfoAsync(params);
+    return result.GetBiddingInfoResult;
+  }
+
+  async getSellerInfo(params: Parameters<BuyerClient['GetSellerInfoAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetSellerInfoAsync(params);
+    return result.GetSellerInfoResult;
+  }
+
+  async markTransactionsPaid(params: Parameters<BuyerClient['MarkTransactionsPaidAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.MarkTransactionsPaidAsync(params);
+    return result;
+  }
+
+  async sendQuestionToSeller(params: Parameters<BuyerClient['SendQuestionToSellerAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.SendQuestionToSellerAsync(params);
+    return result.SendQuestionToSellerResult;
   }
 }
 

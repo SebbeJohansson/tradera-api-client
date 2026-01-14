@@ -1,0 +1,4 @@
+
+/** MarkTransactionsPaidResponse */
+export interface MarkTransactionsPaidResponse {
+}

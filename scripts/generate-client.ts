@@ -9,7 +9,8 @@ const SERVICES = [
   { name: "public", url: "https://api.tradera.com/v3/PublicService.asmx?WSDL" },
   { name: "listing", url: "https://api.tradera.com/v3/ListingService.asmx?WSDL" },
   { name: "restricted", url: "https://api.tradera.com/v3/RestrictedService.asmx?WSDL" },
-  { name: "order", url: "https://api.tradera.com/v3/OrderService.asmx?WSDL" }
+  { name: "order", url: "https://api.tradera.com/v3/OrderService.asmx?WSDL" },
+  { name: "buyer", url: "https://api.tradera.com/v3/BuyerService.asmx?WSDL" }
 ];
 const TEMP_WSDL = resolve(__dirname, "./sources");
 const OUT_DIR = resolve(__dirname, "../src/generated");
