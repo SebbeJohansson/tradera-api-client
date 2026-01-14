@@ -1,10 +1,12 @@
 // Import clients for wrapper classes
 import { createClientAsync as createSearchClientAsync, type SearchClient } from './generated/search/client.js';
 import { createClientAsync as createPublicClientAsync, type PublicClient } from './generated/public/client.js';
+import { createClientAsync as createListingClientAsync, type ListingClient } from './generated/listing/client.js';
 
 // Re-export types that users commonly need (tree-shakeable)
 export type { SearchClient } from './generated/search/client.js';
 export type { PublicClient } from './generated/public/client.js';
+export type { ListingClient } from './generated/listing/client.js';
 
 /**
  * Configuration for Tradera API authentication.
@@ -469,6 +471,32 @@ export class TraderaPublicClient extends BaseTraderaClient<PublicClient> {
     const client = await this.initialize();
     const [result] = await client.GetShippingOptionsAsync(params);
     return result.GetShippingOptionsResult;
+  }
+}
+
+/**
+ * A convenience wrapper for the Tradera Listing Service API.
+ * Handles authentication automatically and provides typed methods for all listing operations.
+ * 
+ * @see {@link https://api.tradera.com/v3/listingservice.asmx} for API documentation
+ * 
+ * @example
+ * ```typescript
+ * const client = new TraderaListingClient({ appId: 1234, appKey: "your-key" });
+ * const [result] = await client.getItemRestarts({ itemId: 123456789 });
+ * ```
+ */
+export class TraderaListingClient extends BaseTraderaClient<ListingClient> {
+  wsdlUrl = 'https://api.tradera.com/v3/ListingService.asmx?WSDL';
+
+  createClientAsync(wsdlUrl: string): Promise<ListingClient> {
+    return createListingClientAsync(wsdlUrl);
+  }
+
+  async getItemRestarts(params: Parameters<ListingClient['GetItemRestartsAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetItemRestartsAsync(params);
+    return result.GetItemRestartsResult;
   }
 }
 

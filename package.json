@@ -25,6 +25,11 @@
       "types": "./dist/generated/public/index.d.ts",
       "import": "./dist/generated/public/index.js",
       "default": "./dist/generated/public/index.js"
+    },
+    "./listing": {
+      "types": "./dist/generated/listing/index.d.ts",
+      "import": "./dist/generated/listing/index.js",
+      "default": "./dist/generated/listing/index.js"
     }
   },
   "license": "MIT",

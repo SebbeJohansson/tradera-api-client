@@ -6,7 +6,8 @@ const __dirname = import.meta.dirname;
 
 const SERVICES = [
   { name: "search", url: "https://api.tradera.com/v3/SearchService.asmx?WSDL" },
-  { name: "public", url: "https://api.tradera.com/v3/PublicService.asmx?WSDL" }
+  { name: "public", url: "https://api.tradera.com/v3/PublicService.asmx?WSDL" },
+  { name: "listing", url: "https://api.tradera.com/v3/ListingService.asmx?WSDL" }
 ];
 const TEMP_WSDL = resolve(__dirname, "./sources");
 const OUT_DIR = resolve(__dirname, "../src/generated");
