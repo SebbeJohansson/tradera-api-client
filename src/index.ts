@@ -200,6 +200,10 @@ export class TraderaSearchClient extends BaseTraderaClient<SearchClient> {
 export class TraderaPublicClient extends BaseTraderaClient<PublicClient> {
   wsdlUrl = 'https://api.tradera.com/v3/PublicService.asmx?WSDL';
 
+  createClientAsync(wsdlUrl: string): Promise<PublicClient> {
+    return createPublicClientAsync(wsdlUrl);
+  }
+
   /**
    * Gets details for a specific item.
    * 
