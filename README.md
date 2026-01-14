@@ -219,6 +219,40 @@ To use the Tradera API, you need to register for API credentials at [Tradera's d
 
 These are automatically included in SOAP headers when using the wrapper clients.
 
+### User Impersonation
+
+Some services require **user impersonation** in addition to app credentials. This means you need to provide the Tradera user's ID and authorization token:
+
+- [`TraderaRestrictedClient`](src/index.ts) - For managing items, transactions, and shop settings
+- [`TraderaOrderClient`](src/index.ts) - For managing orders
+
+```typescript
+const client = new TraderaRestrictedClient({
+  appId: YOUR_APP_ID,
+  appKey: "YOUR_APP_KEY",
+  userId: 12345,          // Tradera user ID
+  token: "USER_TOKEN"     // Authorization token
+});
+```
+
+To obtain a user token, use the `fetchToken` method from `TraderaPublicClient`:
+
+```typescript
+import { TraderaPublicClient } from 'tradera-soap-api-client';
+
+const publicClient = new TraderaPublicClient({
+  appId: YOUR_APP_ID,
+  appKey: "YOUR_APP_KEY"
+});
+
+const tokenResponse = await publicClient.fetchToken({
+  userName: "trader-username",
+  password: "trader-password"
+});
+
+console.log(tokenResponse.FetchTokenResult); // The auth token
+```
+
 ## Tree Shaking
 
 This package supports tree shaking. You can import only what you need:

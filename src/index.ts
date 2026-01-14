@@ -3,12 +3,14 @@ import { createClientAsync as createSearchClientAsync, type SearchClient } from 
 import { createClientAsync as createPublicClientAsync, type PublicClient } from './generated/public/client.js';
 import { createClientAsync as createListingClientAsync, type ListingClient } from './generated/listing/client.js';
 import { createClientAsync as createRestrictedClientAsync, type RestrictedClient } from './generated/restricted/client.js';
+import { createClientAsync as createOrderClientAsync, type OrderClient } from './generated/order/client.js';
 
 // Re-export types that users commonly need (tree-shakeable)
 export type { SearchClient } from './generated/search/client.js';
 export type { PublicClient } from './generated/public/client.js';
 export type { ListingClient } from './generated/listing/client.js';
 export type { RestrictedClient } from './generated/restricted/client.js';
+export type { OrderClient } from './generated/order/client.js';
 
 /**
  * Configuration for Tradera API authentication.
@@ -725,6 +727,64 @@ export class TraderaRestrictedClient extends BaseTraderaClient<RestrictedClient>
     const client = await this.initialize();
     const [result] = await client.BeginBankIdOnFileVerificationAsync(params);
     return result.BeginBankIdOnFileVerificationResult;
+  }
+}
+
+/**
+ * A convenience wrapper for the Tradera Order Service API.
+ * Handles authentication automatically and provides typed methods for all order operations.
+ *
+ * **Authentication required:** This service requires user impersonation credentials.
+ * You must provide `userId` and `token` in the auth config.
+ *
+ * @see {@link https://api.tradera.com/v3/OrderService.asmx} for API documentation
+ *
+ * @example
+ * ```typescript
+ * const client = new TraderaOrderClient({
+ *   appId: 1234,
+ *   appKey: "your-key",
+ *   userId: 5678,
+ *   token: "user-auth-token"
+ * });
+ * const [result] = await client.getSellerOrders({});
+ * ```
+ */
+export class TraderaOrderClient extends BaseTraderaClient<OrderClient> {
+  wsdlUrl = 'https://api.tradera.com/v3/OrderService.asmx?WSDL';
+
+  createClientAsync(wsdlUrl: string): Promise<OrderClient> {
+    return createOrderClientAsync(wsdlUrl);
+  }
+
+  async getSellerOrders(params: Parameters<OrderClient['GetSellerOrdersAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetSellerOrdersAsync(params);
+    return result.GetSellerOrdersResult;
+  }
+
+  async setSellerOrderAsShipped(params: Parameters<OrderClient['SetSellerOrderAsShippedAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.SetSellerOrderAsShippedAsync(params);
+    return result.SetSellerOrderAsShippedResult;
+  }
+
+  async setSellerOrderAsPaid(params: Parameters<OrderClient['SetSellerOrderAsPaidAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.SetSellerOrderAsPaidAsync(params);
+    return result.SetSellerOrderAsPaidResult;
+  }
+
+  async getOrders(params: Parameters<OrderClient['GetOrdersAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetOrdersAsync(params);
+    return result.GetOrdersResult;
+  }
+
+  async getFreightLabels(params: Parameters<OrderClient['GetFreightLabelsAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetFreightLabelsAsync(params);
+    return result.GetFreightLabelsResult;
   }
 }
 
