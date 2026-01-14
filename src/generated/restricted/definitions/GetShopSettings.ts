@@ -1,0 +1,4 @@
+
+/** GetShopSettings */
+export interface GetShopSettings {
+}

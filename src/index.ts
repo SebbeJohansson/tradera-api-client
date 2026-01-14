@@ -2,11 +2,13 @@
 import { createClientAsync as createSearchClientAsync, type SearchClient } from './generated/search/client.js';
 import { createClientAsync as createPublicClientAsync, type PublicClient } from './generated/public/client.js';
 import { createClientAsync as createListingClientAsync, type ListingClient } from './generated/listing/client.js';
+import { createClientAsync as createRestrictedClientAsync, type RestrictedClient } from './generated/restricted/client.js';
 
 // Re-export types that users commonly need (tree-shakeable)
 export type { SearchClient } from './generated/search/client.js';
 export type { PublicClient } from './generated/public/client.js';
 export type { ListingClient } from './generated/listing/client.js';
+export type { RestrictedClient } from './generated/restricted/client.js';
 
 /**
  * Configuration for Tradera API authentication.
@@ -16,6 +18,10 @@ export interface TraderaAuthConfig {
   appId: number;
   /** Your Tradera application key (GUID string) */
   appKey: string;
+  /** User ID for RestrictedService (required for services that need user impersonation) */
+  userId?: number;
+  /** Authorization token for RestrictedService (required for services that need user impersonation) */
+  token?: string;
 }
 
 // Helper to add auth headers to a client
@@ -26,6 +32,16 @@ function addAuthHeader<T extends { addSoapHeader: Function }>(client: T, authCon
       AppKey: authConfig.appKey
     }
   }, '', 'tns', 'http://api.tradera.com');
+
+  if (authConfig.userId !== undefined && authConfig.token) {
+    client.addSoapHeader({
+      AuthorizationHeader: {
+        UserId: authConfig.userId,
+        Token: authConfig.token
+      }
+    }, '', 'tns', 'http://api.tradera.com');
+  }
+
   return client;
 }
 
@@ -497,6 +513,218 @@ export class TraderaListingClient extends BaseTraderaClient<ListingClient> {
     const client = await this.initialize();
     const [result] = await client.GetItemRestartsAsync(params);
     return result.GetItemRestartsResult;
+  }
+}
+
+/**
+ * A convenience wrapper for the Tradera Restricted Service API.
+ * Handles authentication automatically and provides typed methods for all restricted operations.
+ * 
+ * @see {@link https://api.tradera.com/v3/restrictedservice.asmx} for API documentation
+ * 
+ * @example
+ * ```typescript
+ * const client = new TraderaRestrictedClient({ appId: 1234, appKey: "your-key" });
+ * const [result] = await client.getItem({ itemId: 123456789 });
+ * ```
+ */
+export class TraderaRestrictedClient extends BaseTraderaClient<RestrictedClient> {
+  wsdlUrl = 'https://api.tradera.com/v3/RestrictedService.asmx?WSDL';
+
+  createClientAsync(wsdlUrl: string): Promise<RestrictedClient> {
+    return createRestrictedClientAsync(wsdlUrl);
+  }
+
+  async getItem(params: Parameters<RestrictedClient['GetItemAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetItemAsync(params);
+    return result.GetItemResult;
+  }
+
+  async getSellerItems(params: Parameters<RestrictedClient['GetSellerItemsAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetSellerItemsAsync(params);
+    return result.GetSellerItemsResult;
+  }
+
+  async getSellerTransactions(params: Parameters<RestrictedClient['GetSellerTransactionsAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetSellerTransactionsAsync(params);
+    return result.GetSellerTransactionsResult;
+  }
+
+  async addItem(params: Parameters<RestrictedClient['AddItemAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.AddItemAsync(params);
+    return result.AddItemResult;
+  }
+
+  async addItemXml(params: Parameters<RestrictedClient['AddItemXmlAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.AddItemXmlAsync(params);
+    return result.AddItemXmlResult;
+  }
+
+  async addItemImage(params: Parameters<RestrictedClient['AddItemImageAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.AddItemImageAsync(params);
+    return result;
+  }
+
+  async addItemCampaignCode(params: Parameters<RestrictedClient['AddItemCampaignCodeAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.AddItemCampaignCodeAsync(params);
+    return result;
+  }
+
+  async validateCampaignCode(params: Parameters<RestrictedClient['ValidateCampaignCodeAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.ValidateCampaignCodeAsync(params);
+    return result.ValidateCampaignCodeResult;
+  }
+
+  async addItemCommit(params: Parameters<RestrictedClient['AddItemCommitAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.AddItemCommitAsync(params);
+    return result;
+  }
+
+  async leaveFeedback(params: Parameters<RestrictedClient['LeaveFeedbackAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.LeaveFeedbackAsync(params);
+    return result.LeaveFeedbackResult;
+  }
+
+  async endItem(params: Parameters<RestrictedClient['EndItemAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.EndItemAsync(params);
+    return result.EndItemResult;
+  }
+
+  async addShopItem(params: Parameters<RestrictedClient['AddShopItemAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.AddShopItemAsync(params);
+    return result.AddShopItemResult;
+  }
+
+  async addShopItemVariant(params: Parameters<RestrictedClient['AddShopItemVariantAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.AddShopItemVariantAsync(params);
+    return result.AddShopItemVariantResult;
+  }
+
+  async updateShopItem(params: Parameters<RestrictedClient['UpdateShopItemAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.UpdateShopItemAsync(params);
+    return result.UpdateShopItemResult;
+  }
+
+  async updateShopItemVariant(params: Parameters<RestrictedClient['UpdateShopItemVariantAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.UpdateShopItemVariantAsync(params);
+    return result.UpdateShopItemVariantResult;
+  }
+
+  async getRequestResults(params: Parameters<RestrictedClient['GetRequestResultsAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetRequestResultsAsync(params);
+    return result.GetRequestResultsResult;
+  }
+
+  async removeShopItem(params: Parameters<RestrictedClient['RemoveShopItemAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.RemoveShopItemAsync(params);
+    return result.RemoveShopItemResult;
+  }
+
+  async setShopSettings(params: Parameters<RestrictedClient['SetShopSettingsAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.SetShopSettingsAsync(params);
+    return result;
+  }
+
+  async getShopSettings(params: Parameters<RestrictedClient['GetShopSettingsAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetShopSettingsAsync(params);
+    return result.GetShopSettingsResult;
+  }
+
+  async updateTransactionStatus(params: Parameters<RestrictedClient['UpdateTransactionStatusAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.UpdateTransactionStatusAsync(params);
+    return result.UpdateTransactionStatusResult;
+  }
+
+  async getUpdatedSellerItems(params: Parameters<RestrictedClient['GetUpdatedSellerItemsAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetUpdatedSellerItemsAsync(params);
+    return result.GetUpdatedSellerItemsResult;
+  }
+
+  async getUserInfo(params: Parameters<RestrictedClient['GetUserInfoAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetUserInfoAsync(params);
+    return result.GetUserInfoResult;
+  }
+
+  async setPriceOnShopItems(params: Parameters<RestrictedClient['SetPriceOnShopItemsAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.SetPriceOnShopItemsAsync(params);
+    return result.SetPriceOnShopItemsResult;
+  }
+
+  async setPricesOnNonShopItems(params: Parameters<RestrictedClient['SetPricesOnNonShopItemsAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.SetPricesOnNonShopItemsAsync(params);
+    return result.SetPricesOnNonShopItemsResult;
+  }
+
+  async setActivateDateOnShopItems(params: Parameters<RestrictedClient['SetActivateDateOnShopItemsAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.SetActivateDateOnShopItemsAsync(params);
+    return result.SetActivateDateOnShopItemsResult;
+  }
+
+  async setQuantityOnShopItems(params: Parameters<RestrictedClient['SetQuantityOnShopItemsAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.SetQuantityOnShopItemsAsync(params);
+    return result.SetQuantityOnShopItemsResult;
+  }
+
+  async leaveOrderFeedbackToBuyer(params: Parameters<RestrictedClient['LeaveOrderFeedbackToBuyerAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.LeaveOrderFeedbackToBuyerAsync(params);
+    return result;
+  }
+
+  async getMemberPaymentOptions(params: Parameters<RestrictedClient['GetMemberPaymentOptionsAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetMemberPaymentOptionsAsync(params);
+    return result.GetMemberPaymentOptionsResult;
+  }
+
+  async beginBankIdVerification(params: Parameters<RestrictedClient['BeginBankIdVerificationAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.BeginBankIdVerificationAsync(params);
+    return result.BeginBankIdVerificationResult;
+  }
+
+  async getBankIdVerificationProgress(params: Parameters<RestrictedClient['GetBankIdVerificationProgressAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.GetBankIdVerificationProgressAsync(params);
+    return result.GetBankIdVerificationProgressResult;
+  }
+
+  async cancelBankIdVerification(params: Parameters<RestrictedClient['CancelBankIdVerificationAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.CancelBankIdVerificationAsync(params);
+    return result;
+  }
+
+  async beginBankIdOnFileVerification(params: Parameters<RestrictedClient['BeginBankIdOnFileVerificationAsync']>[0]) {
+    const client = await this.initialize();
+    const [result] = await client.BeginBankIdOnFileVerificationAsync(params);
+    return result.BeginBankIdOnFileVerificationResult;
   }
 }
 

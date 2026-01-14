@@ -1,0 +1,4 @@
+
+/** AddItemImageResponse */
+export interface AddItemImageResponse {
+}

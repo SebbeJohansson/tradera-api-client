@@ -30,6 +30,11 @@
       "types": "./dist/generated/listing/index.d.ts",
       "import": "./dist/generated/listing/index.js",
       "default": "./dist/generated/listing/index.js"
+    },
+    "./restricted": {
+      "types": "./dist/generated/restricted/index.d.ts",
+      "import": "./dist/generated/restricted/index.js",
+      "default": "./dist/generated/restricted/index.js"
     }
   },
   "license": "MIT",

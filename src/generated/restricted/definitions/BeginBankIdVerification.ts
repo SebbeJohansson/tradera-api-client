@@ -1,0 +1,4 @@
+
+/** BeginBankIdVerification */
+export interface BeginBankIdVerification {
+}

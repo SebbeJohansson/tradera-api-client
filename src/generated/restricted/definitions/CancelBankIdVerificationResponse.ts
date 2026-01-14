@@ -1,0 +1,4 @@
+
+/** CancelBankIdVerificationResponse */
+export interface CancelBankIdVerificationResponse {
+}
