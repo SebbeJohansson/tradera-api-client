@@ -67,7 +67,7 @@ abstract class BaseTraderaClient<TClient extends { addSoapHeader: Function }> {
  * ```
  */
 export class TraderaSearchClient extends BaseTraderaClient<SearchClient> {
-  wsdlUrl = 'http://api.tradera.com/v3/SearchService.asmx?WSDL';
+  wsdlUrl = 'https://api.tradera.com/v3/SearchService.asmx?WSDL';
 
   createClientAsync(wsdlUrl: string): Promise<SearchClient> {
     return createSearchClientAsync(wsdlUrl);
@@ -176,7 +176,7 @@ export class TraderaSearchClient extends BaseTraderaClient<SearchClient> {
  * ```
  */
 export class TraderaPublicClient extends BaseTraderaClient<PublicClient> {
-  wsdlUrl = 'http://api.tradera.com/v3/PublicService.asmx?WSDL';
+  wsdlUrl = 'https://api.tradera.com/v3/PublicService.asmx?WSDL';
 
   /**
    * Gets details for a specific item.
