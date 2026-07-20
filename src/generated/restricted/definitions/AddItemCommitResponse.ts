@@ -1,4 +1,0 @@
-
-/** AddItemCommitResponse */
-export interface AddItemCommitResponse {
-}

@@ -1,4 +1,0 @@
-
-/** GetItemFieldValues */
-export interface GetItemFieldValues {
-}

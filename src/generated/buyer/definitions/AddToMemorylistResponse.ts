@@ -1,4 +1,0 @@
-
-/** AddToMemorylistResponse */
-export interface AddToMemorylistResponse {
-}

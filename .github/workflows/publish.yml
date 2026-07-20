@@ -1,30 +1,40 @@
-name: Publish to npm
+name: Validate packages
 
 on:
+  pull_request:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
 
 jobs:
-  publish:
+  validate:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
+    strategy:
+      matrix:
+        node-version: [20, 22, 24]
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
-      
+          node-version: ${{ matrix.node-version }}
+          cache: yarn
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      
+
+      - name: Verify generated clients
+        run: yarn generate && git diff --exit-code -- src/generated/rest
+
+      - name: Typecheck
+        run: yarn typecheck
+
+      - name: Test
+        run: yarn test
+
       - name: Build
         run: yarn build
-      
-      - name: Publish to npm
-        run: npm publish --access public
+
+      - name: Inspect package
+        run: yarn pack --filename /tmp/tradera-api.tgz && tar -tzf /tmp/tradera-api.tgz

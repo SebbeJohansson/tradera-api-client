@@ -1,65 +1,46 @@
 {
-  "name": "tradera-soap-api-client",
-  "description": "Tradera API Client with typescript support",
-  "version": "1.5.1",
+  "name": "tradera-api",
+  "description": "Typed TypeScript client for the Tradera REST API",
+  "version": "0.1.0",
   "type": "module",
+  "packageManager": "yarn@1.22.22",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/SebbeJohansson/tradera-api-client"
   },
-  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
-    },
-    "./search": {
-      "types": "./dist/generated/search/index.d.ts",
-      "import": "./dist/generated/search/index.js",
-      "default": "./dist/generated/search/index.js"
-    },
-    "./public": {
-      "types": "./dist/generated/public/index.d.ts",
-      "import": "./dist/generated/public/index.js",
-      "default": "./dist/generated/public/index.js"
-    },
-    "./listing": {
-      "types": "./dist/generated/listing/index.d.ts",
-      "import": "./dist/generated/listing/index.js",
-      "default": "./dist/generated/listing/index.js"
-    },
-    "./restricted": {
-      "types": "./dist/generated/restricted/index.d.ts",
-      "import": "./dist/generated/restricted/index.js",
-      "default": "./dist/generated/restricted/index.js"
-    },
-    "./order": {
-      "types": "./dist/generated/order/index.d.ts",
-      "import": "./dist/generated/order/index.js",
-      "default": "./dist/generated/order/index.js"
-    },
-    "./buyer": {
-      "types": "./dist/generated/buyer/index.d.ts",
-      "import": "./dist/generated/buyer/index.js",
-      "default": "./dist/generated/buyer/index.js"
+      "import": "./dist/index.js"
     }
   },
   "license": "MIT",
   "dependencies": {
-    "soap": "1.6.3",
-    "ts-node": "10.9.2"
+    "openapi-fetch": "0.17.0"
   },
   "devDependencies": {
     "@types/node": "25.0.6",
+    "openapi-typescript": "7.13.0",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
-    "wsdl-tsclient": "1.7.1"
+    "vitest": "4.1.10"
   },
   "scripts": {
-    "build": "tsc",
-    "generate-client": "tsx scripts/generate-client.ts"
+    "build": "yarn clean && tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "generate": "tsx scripts/generate-client.ts",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.scripts.json",
+    "update-contract": "tsx scripts/update-contract.ts && yarn generate"
   }
 }

@@ -1,4 +1,0 @@
-
-/** GetOfficalTime */
-export interface GetOfficalTime {
-}
