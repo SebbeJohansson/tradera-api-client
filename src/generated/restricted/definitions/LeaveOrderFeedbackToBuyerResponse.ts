@@ -1,4 +1,0 @@
-
-/** LeaveOrderFeedbackToBuyerResponse */
-export interface LeaveOrderFeedbackToBuyerResponse {
-}

@@ -1,4 +1,0 @@
-
-/** GetUserInfo */
-export interface GetUserInfo {
-}

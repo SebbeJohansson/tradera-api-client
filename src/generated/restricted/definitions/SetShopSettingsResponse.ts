@@ -1,4 +1,0 @@
-
-/** SetShopSettingsResponse */
-export interface SetShopSettingsResponse {
-}

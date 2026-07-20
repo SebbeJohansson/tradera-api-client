@@ -1,4 +1,0 @@
-
-/** AddItemCampaignCodeResponse */
-export interface AddItemCampaignCodeResponse {
-}

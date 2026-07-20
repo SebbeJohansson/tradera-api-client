@@ -1,4 +1,0 @@
-
-/** BeginBankIdOnFileVerification */
-export interface BeginBankIdOnFileVerification {
-}

@@ -1,4 +1,0 @@
-
-/** GetItemTypes */
-export interface GetItemTypes {
-}

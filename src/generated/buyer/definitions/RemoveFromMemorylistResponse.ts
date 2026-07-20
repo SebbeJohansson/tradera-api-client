@@ -1,4 +1,0 @@
-
-/** RemoveFromMemorylistResponse */
-export interface RemoveFromMemorylistResponse {
-}

@@ -1,4 +1,0 @@
-
-/** CancelBankIdVerificationResponse */
-export interface CancelBankIdVerificationResponse {
-}
