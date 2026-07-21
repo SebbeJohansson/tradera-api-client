@@ -13,6 +13,24 @@ type Body<Path extends keyof paths, Method extends keyof paths[Path]> = Operatio
 type Request<Path extends keyof paths, Method extends keyof paths[Path]> = PathParams<Path, Method> & Query<Path, Method> & Body<Path, Method>;
 
 export class TraderaClient extends BaseTraderaClient {
+
+  readonly search: TraderaSearchClient;
+  readonly public: TraderaPublicClient;
+  readonly listing: TraderaListingClient;
+  readonly restricted: TraderaRestrictedClient;
+  readonly order: TraderaOrderClient;
+  readonly buyer: TraderaBuyerClient;
+
+  constructor(config: TraderaClientConfig) {
+    super(config);
+    this.search = new TraderaSearchClient(config, this.raw);
+    this.public = new TraderaPublicClient(config, this.raw);
+    this.listing = new TraderaListingClient(config, this.raw);
+    this.restricted = new TraderaRestrictedClient(config, this.raw);
+    this.order = new TraderaOrderClient(config, this.raw);
+    this.buyer = new TraderaBuyerClient(config, this.raw);
+  }
+
   /** Fetches an authentication token for a user. */
   async fetchToken(params: Body<"/v4/auth/token", "post">) {
     const { data } = await this.raw.POST("/v4/auth/token", { body: params });
@@ -328,12 +346,6 @@ export class TraderaClient extends BaseTraderaClient {
   /** Gets shipping options for the specified country codes. */
   async getShippingOptions(params: Query<"/v4/reference-data/shipping-options", "get"> = {}) {
     const { data } = await this.raw.GET("/v4/reference-data/shipping-options", { params: { query: params } });
-    return data;
-  }
-
-  /** Searches for items with basic parameters. */
-  async search(params: Query<"/v4/search", "get"> = {}) {
-    const { data } = await this.raw.GET("/v4/search", { params: { query: params } });
     return data;
   }
 

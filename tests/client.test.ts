@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   createTraderaClient,
   TraderaApiError,
+  TraderaConfigError,
   TraderaPublicClient,
   TraderaRestrictedClient,
   TraderaSearchClient,
@@ -19,6 +20,15 @@ function jsonResponse(body: unknown, init?: ResponseInit): Response {
 }
 
 describe("createTraderaClient", () => {
+  it.each([
+    [{ appId: 0, appKey: "app-key" }, "appId"],
+    [{ appId: 1234, appKey: "" }, "appKey"],
+    [{ appId: 1234, appKey: "app-key", userId: 5678 }, "userId and token"],
+  ])("rejects invalid configuration", (config, message) => {
+    expect(() => createTraderaClient(config)).toThrowError(TraderaConfigError);
+    expect(() => createTraderaClient(config)).toThrowError(message);
+  });
+
   it("adds application credentials to requests", async () => {
     const fetch = vi.fn<typeof globalThis.fetch>(async (request) => {
       expect(request.url).toBe("https://api.tradera.com/v4/reference-data/time");
@@ -96,9 +106,68 @@ describe("createTraderaClient", () => {
     });
     const client = createTraderaClient({ appId: 1234, appKey: "app-key", fetch });
 
-    await client.search({ query: "vintage", categoryId: 10 });
+    await client.search.search({ query: "vintage", categoryId: 10 });
 
     expect(fetch).toHaveBeenCalledOnce();
+  });
+
+  it("exposes service-scoped clients using the shared raw client", async () => {
+    const fetch = vi.fn<typeof globalThis.fetch>(async () => jsonResponse({ id: 123456789 }));
+    const client = createTraderaClient({ appId: 1234, appKey: "app-key", fetch });
+
+    expect(client.public.raw).toBe(client.raw);
+    expect(client.search.raw).toBe(client.raw);
+    await expect(client.public.getItem({ itemId: 123456789 })).resolves.toMatchObject({ id: 123456789 });
+    expect(fetch).toHaveBeenCalledOnce();
+  });
+
+  it("retries retryable GET responses", async () => {
+    const fetch = vi.fn<typeof globalThis.fetch>()
+      .mockResolvedValueOnce(new Response("unavailable", { status: 503 }))
+      .mockResolvedValueOnce(jsonResponse("2026-07-20T12:00:00Z"));
+    const client = createTraderaClient({
+      appId: 1234,
+      appKey: "app-key",
+      fetch,
+      retry: { maxRetries: 1, baseDelayMs: 0, jitter: 0 },
+    });
+
+    await expect(client.getOfficialTime()).resolves.toBe("2026-07-20T12:00:00Z");
+    expect(fetch).toHaveBeenCalledTimes(2);
+  });
+
+  it("aborts requests after the configured timeout", async () => {
+    const fetch = vi.fn<typeof globalThis.fetch>((request) => new Promise((_resolve, reject) => {
+      request.signal.addEventListener("abort", () => reject(request.signal.reason), { once: true });
+    }));
+    const client = createTraderaClient({ appId: 1234, appKey: "app-key", fetch, timeoutMs: 5 });
+
+    await expect(client.getOfficialTime()).rejects.toMatchObject({ name: "TimeoutError" });
+  });
+
+  it("shares rate limiting across aggregate and service-scoped calls", async () => {
+    vi.useFakeTimers();
+    try {
+      const fetch = vi.fn<typeof globalThis.fetch>(async () => jsonResponse({}));
+      const client = createTraderaClient({
+        appId: 1234,
+        appKey: "app-key",
+        fetch,
+        rateLimit: 1,
+        timeoutMs: 5000,
+      });
+
+      await client.getCategories();
+      const scopedRequest = client.public.getCategories();
+      await Promise.resolve();
+      expect(fetch).toHaveBeenCalledOnce();
+
+      await vi.advanceTimersByTimeAsync(1000);
+      await scopedRequest;
+      expect(fetch).toHaveBeenCalledTimes(2);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
 

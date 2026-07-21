@@ -15,6 +15,7 @@ A fully-typed TypeScript client for the [Tradera](https://www.tradera.com) REST 
 - 🛠️ **IntelliSense support** - Full autocomplete in VS Code and other TypeScript-aware editors
 - 🌳 **Tree-shakeable** - Import only what you need
 - 🔄 **Auto-generated** - Client code is generated directly from Tradera's OpenAPI definition
+- **Configurable transport** - Runtime validation, timeouts, retries, rate limiting, custom headers, and custom Fetch implementations
 
 ## Official Tradera API Documentation
 
@@ -39,6 +40,25 @@ yarn add tradera-api
 
 
 ## Usage
+
+### Unified Client
+
+`TraderaClient` contains every REST operation and exposes service-scoped instances that share the same configuration, transport, and rate limiter:
+
+```typescript
+import { createTraderaClient } from 'tradera-api';
+
+const client = createTraderaClient({
+  appId: YOUR_APP_ID,
+  appKey: "YOUR_APP_KEY"
+});
+
+const item = await client.getItem({ itemId: 123456789 });
+const searchResult = await client.search.search({ query: "vintage" });
+const publicItem = await client.public.getItem({ itemId: 123456789 });
+```
+
+The standalone `TraderaSearchClient`, `TraderaPublicClient`, and other service classes remain available when only one API area is needed.
 
 ### Search Service
 
@@ -195,6 +215,30 @@ To use the Tradera API, you need to register for API credentials at [Tradera's d
 - **AppKey** - Your application key (GUID string)
 
 These are automatically included in the `X-App-Id` and `X-App-Key` HTTP headers when using the clients.
+
+### Transport Configuration
+
+Requests time out after 30 seconds by default. Retries and rate limiting are opt-in:
+
+```typescript
+const client = createTraderaClient({
+  appId: YOUR_APP_ID,
+  appKey: "YOUR_APP_KEY",
+  timeoutMs: 15_000,
+  rateLimit: 5,
+  retry: {
+    maxRetries: 3,
+    baseDelayMs: 500,
+    maxDelayMs: 10_000,
+    multiplier: 2,
+    jitter: 0.2
+  }
+});
+```
+
+Retries use exponential backoff for network failures, `429` responses, and `5xx` responses. Only idempotent HTTP methods are retried by default. Set `retryUnsafeMethods: true` only when the application can safely repeat operations such as purchases or listing creation.
+
+Invalid application credentials, incomplete user credentials, and invalid transport values throw `TraderaConfigError` during client construction.
 
 ### User Impersonation
 

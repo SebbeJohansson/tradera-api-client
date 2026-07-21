@@ -1,6 +1,8 @@
 export {
   TraderaApiError,
+  TraderaConfigError,
   type TraderaClientConfig,
+  type TraderaRetryConfig,
   type TraderaUserCredentials,
 } from "./client.js";
 
