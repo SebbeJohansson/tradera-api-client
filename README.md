@@ -33,11 +33,12 @@ New integrations should use this REST v4 client.
 ```bash
 npm install tradera-api
 ```
+
 or if you use yarn
+
 ```bash
 yarn add tradera-api
 ```
-
 
 ## Usage
 
@@ -145,43 +146,118 @@ const { data } = await client.raw.GET('/v4/items/{itemId}', {
 console.log(data);
 ```
 
+## Available Clients
+
+The unified client exposes each service directly. Every service can also be constructed independently using the same config shape.
+
+| Unified property | Standalone class | Purpose | User authentication |
+| --- | --- | --- | --- |
+| `client.search` | `TraderaSearchClient` | Item search operations | No |
+| `client.public` | `TraderaPublicClient` | Public items, users, categories, and reference data | No |
+| `client.listing` | `TraderaListingClient` | Item restart history | No |
+| `client.restricted` | `TraderaRestrictedClient` | Authenticated seller, listing, and account operations | Yes |
+| `client.order` | `TraderaOrderClient` | Seller order operations | Yes |
+| `client.buyer` | `TraderaBuyerClient` | Buyer purchases, transactions, wishlist, and seller information | Yes |
+
+Endpoint methods and parameter types are generated from the pinned OpenAPI contract. See the [REST API Reference](https://api.tradera.com/v4/swagger/index.html) for the full endpoint inventory; stable client method names and service assignments are maintained in [`openapi/client-operations.json`](openapi/client-operations.json).
+
 ## Available API Methods
 
-### Search Service
+These tables list methods on the standalone service clients and the corresponding service properties on `TraderaClient`. Unified aggregate aliases are not included.
 
-[Official Documentation](https://api.tradera.com/v4/swagger/index.html)
-
-| Method | Description | Documentation |
-|--------|-------------|---------------|
-| `search` | Search for items | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `searchAdvanced` | Advanced search with filters | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `searchCategoryCount` | Get category counts for search | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `searchByFixedCriteria` | Search with fixed criteria lists | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `searchByZipCode` | Search items near a zip code | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-
-### Public Service
-
-[Official Documentation](https://api.tradera.com/v4/swagger/index.html)
+### Search Client
 
 | Method | Description | Documentation |
-|--------|-------------|---------------|
-| `getItem` | Get details for a specific item | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `getSellerItems` | Get items from a specific seller | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `getSellerItemsQuickInfo` | Get minimal item info (useful for new items) | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `getUserByAlias` | Get user information by alias | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `fetchToken` | Fetch authorization token | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `getOfficalTime` | Get official Tradera time | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `getCategories` | Get category hierarchy | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| --- | --- | --- |
+| `search` | Search for items using basic parameters | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `searchAdvanced` | Perform an advanced search with multiple filters | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `searchCategoryCount` | Get category counts for a search query | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `searchByZipCode` | Search for items by zip code | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `searchByFixedCriteria` | Search using fixed criteria such as ending soon or newly listed | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+
+### Public Client
+
+| Method | Description | Documentation |
+| --- | --- | --- |
+| `fetchToken` | Fetch an authentication token for a user | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getCategories` | Get the category tree | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
 | `getAttributeDefinitions` | Get attribute definitions for a category | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `getAcceptedBidderTypes` | Get accepted bidder types | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `getExpoItemTypes` | Get expo item types with prices | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `getItemTypes` | Get available item types | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `getCounties` | Get list of counties for search | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `getItemFieldValues` | Get available item field values | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getItem` | Get a single item by ID | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
 | `getItemAddedDescriptions` | Get added descriptions for an item | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `getFeedback` | Get user feedback | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `getFeedbackSummary` | Get user feedback summary | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
-| `getShippingOptions` | Get shipping options for countries | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getSellerItems` | Get items listed by a seller | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getSellerItemsQuickInfo` | Get quick information for items listed by a seller | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getOfficalTime` | Get the current Tradera server time | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getAcceptedBidderTypes` | Get accepted bidder types | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getExpoItemTypes` | Get expo item types and current fees | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getItemTypes` | Get available item types | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getCounties` | Get Swedish counties | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getItemFieldValues` | Get VAT rates, item attributes, payment types, and shipping types | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getShippingOptions` | Get shipping options for country codes | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getUserByAlias` | Get a user by alias | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getFeedback` | Get feedback for a user | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getFeedbackSummary` | Get a feedback summary for a user | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+
+### Listing Client
+
+| Method | Description | Documentation |
+| --- | --- | --- |
+| `getItemRestarts` | Get item restart history | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+
+### Restricted Client
+
+| Method | Description | Documentation |
+| --- | --- | --- |
+| `beginBankIdVerification` | Begin a BankID verification | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `beginBankIdOnFileVerification` | Begin a BankID-on-file verification | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getBankIdVerificationProgress` | Get BankID verification progress | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `cancelBankIdVerification` | Cancel an ongoing BankID verification | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getItem` | Get an authenticated seller's item | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `endItem` | End an item listing | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getSellerItems` | Get the authenticated seller's items | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getUpdatedSellerItems` | Get seller items updated since a row version | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getSellerTransactions` | Get seller transactions within a date range | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `addItem` | Add an item listing | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `addItemXml` | Add an item listing from XML | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `addItemImage` | Add an image to a pending item request | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `addItemCampaignCode` | Add a campaign code to a pending item request | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `addItemCommit` | Commit and finalize a pending item request | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `setPricesOnNonShopItems` | Set prices on non-shop items | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `updateItemPrice` | Update a non-shop item price without changing its item type | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `addShopItem` | Add a shop item | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `updateShopItem` | Update a shop item | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `addShopItemVariant` | Add a shop item variant | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `updateShopItemVariant` | Update a shop item variant | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `removeShopItem` | Remove a shop item | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `setPriceOnShopItems` | Set prices on shop items | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `setQuantityOnShopItems` | Set quantities on shop items | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `setActivateDateOnShopItems` | Set activation dates on shop items | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getRequestResults` | Get results for previously queued requests | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getShopSettings` | Get the authenticated seller's shop settings | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `setShopSettings` | Update the authenticated seller's shop settings | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `leaveFeedback` | Leave feedback for a transaction | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `leaveOrderFeedbackToBuyer` | Leave order feedback for a buyer | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `validateCampaignCode` | Validate a campaign code for a category | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `updateTransactionStatus` | Update a transaction status | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getUserInfo` | Get the authenticated user's profile | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getMemberPaymentOptions` | Get the authenticated user's payment options | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+
+### Order Client
+
+| Method | Description | Documentation |
+| --- | --- | --- |
+| `getSellerOrders` | Get seller orders within a date range | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getOrders` | Get orders by ID | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `setSellerOrderAsShipped` | Mark an order as shipped | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getFreightLabels` | Get freight labels for orders | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+
+### Buyer Client
+
+| Method | Description | Documentation |
+| --- | --- | --- |
+| `buy` | Buy an item using Buy It Now | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getBuyerTransactions` | Get the authenticated buyer's transactions | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getMemorylistItems` | Get the authenticated buyer's wishlist items | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
+| `getSellerInfo` | Get seller information for a user | [REST API Reference](https://api.tradera.com/v4/swagger/index.html) |
 
 ## Scripts
 
@@ -207,7 +283,26 @@ To fetch the latest OpenAPI definition and regenerate the client:
 yarn update-contract
 ```
 
-## Authentication
+## Configuration
+
+All unified and standalone clients accept `TraderaClientConfig`:
+
+| Option | Default | Purpose |
+| --- | --- | --- |
+| `appId` | Required | Positive Tradera application ID |
+| `appKey` | Required | Tradera application key |
+| `user` | None | Preferred user credentials: `{ userId, userToken }` |
+| `userId`, `token` | None | Backward-compatible top-level user credentials; both are required together |
+| `baseUrl` | `https://api.tradera.com` | API base URL |
+| `fetch` | `globalThis.fetch` | Custom Fetch implementation |
+| `headers` | None | Additional request headers |
+| `timeoutMs` | `30000` | Timeout for the complete request lifecycle |
+| `retry` | Disabled | Retry and exponential-backoff options |
+| `rateLimit` | Disabled | Maximum requests per second |
+
+Missing or invalid application credential values, incomplete user credentials, and invalid transport values throw `TraderaConfigError` during client construction.
+
+### Application Authentication
 
 To use the Tradera API, you need to register for API credentials at [Tradera's developer portal](https://api.tradera.com). You will receive:
 
@@ -236,25 +331,28 @@ const client = createTraderaClient({
 });
 ```
 
-Retries use exponential backoff for network failures, `429` responses, and `5xx` responses. Only idempotent HTTP methods are retried by default. Set `retryUnsafeMethods: true` only when the application can safely repeat operations such as purchases or listing creation.
-
-Invalid application credentials, incomplete user credentials, and invalid transport values throw `TraderaConfigError` during client construction.
+Retries use exponential backoff for network failures, `429` responses, and `5xx` responses. Only idempotent HTTP methods are retried by default. Set `retryUnsafeMethods: true` only when the application can safely repeat operations such as purchases or listing creation. The rate limiter is shared by the unified client and all of its service-scoped instances.
 
 ### User Impersonation
 
 Some services require **user impersonation** in addition to app credentials. This means you need to provide the Tradera user's ID and authorization token:
 
-- [`TraderaRestrictedClient`](src/index.ts) - For managing items, transactions, and shop settings
-- [`TraderaOrderClient`](src/index.ts) - For managing orders
+- `TraderaRestrictedClient` - For managing items, transactions, shop settings, and account data
+- `TraderaOrderClient` - For managing seller orders
+- `TraderaBuyerClient` - For purchases, buyer transactions, wishlist items, and seller information
 
 ```typescript
 const client = new TraderaRestrictedClient({
   appId: YOUR_APP_ID,
   appKey: "YOUR_APP_KEY",
-  userId: 12345,          // Tradera user ID
-  token: "USER_TOKEN"     // Authorization token
+  user: {
+    userId: 12345,
+    userToken: "USER_TOKEN"
+  }
 });
 ```
+
+The top-level `userId` and `token` options remain supported for compatibility, but both values must be supplied together.
 
 To obtain a user token, use the `fetchToken` method from `TraderaPublicClient`:
 
@@ -274,6 +372,22 @@ const token = await publicClient.fetchToken({
 console.log(token);
 ```
 
+## Errors
+
+Non-successful HTTP responses throw `TraderaApiError`, which includes the HTTP status, parsed response body, response headers, and Tradera request ID when available:
+
+```typescript
+import { TraderaApiError } from 'tradera-api';
+
+try {
+  await client.public.getItem({ itemId: 123456789 });
+} catch (error) {
+  if (error instanceof TraderaApiError) {
+    console.error(error.status, error.requestId, error.body);
+  }
+}
+```
+
 ## Tree Shaking
 
 This package supports tree shaking. You can import only what you need:
@@ -288,6 +402,8 @@ import type { components, paths } from 'tradera-api';
 type Item = components['schemas']['Item'];
 type GetItemPath = paths['/v4/items/{itemId}'];
 ```
+
+Importing a standalone service allows bundlers to remove unrelated service implementations. Importing `createTraderaClient` intentionally includes all six services because the unified client constructs each service-scoped instance.
 
 ## Dependencies
 
