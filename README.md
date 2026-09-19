@@ -27,6 +27,25 @@ A fully-typed TypeScript client for the [Tradera](https://www.tradera.com) REST 
 Tradera's SOAP API remains at v3 and is intended for existing integrations. [Tradera recommends that all new integrations should use the new REST-API.](https://api.tradera.com/documentation/soap-getting-started#:~:text=These%20guides%20are%20for%20existing%20SOAP%20API%20integrations.%20New%20integrations%20should%20start%20with%20the%20REST%20API%20v4.) The previous SOAP client is still available as [`tradera-soap-api-client`](https://www.npmjs.com/package/tradera-soap-api-client), and its source is preserved on the [`archive/v3`](https://github.com/SebbeJohansson/tradera-api-client/tree/archive/v3) branch.
 New integrations should use this REST v4 client.
 
+## Versioning
+
+The major version of this package tracks the major version of the Tradera REST API it
+targets. This client is `4.x`, so it speaks Tradera REST API v4. If Tradera ships a v5,
+this package moves to `5.x`.
+
+That has one consequence worth knowing about before you pin a range:
+
+- **Major** changes only when the targeted Tradera API major changes.
+- **Minor** covers everything else that is user visible, including breaking changes to
+  this package's own API. A minor bump is not guaranteed to be backwards compatible.
+- **Patch** is for fixes that do not change the public API.
+
+So the usual `^4.0.0` range can pull in a breaking change. If you need stability, pin the
+minor (`~4.1.0`) or an exact version, and read the release notes before upgrading.
+
+Versions below `4.0.0` on npm are a placeholder publish and are not a usable client.
+The `1.x` line belongs to the separate SOAP package linked above.
+
 ## Installation
 
 ```bash
